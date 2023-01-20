@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class StudentRest {
-    private Integer id;
+    private Integer studentId;
     private String name;
     private String lastName;
     private LocalDate birthDate;
