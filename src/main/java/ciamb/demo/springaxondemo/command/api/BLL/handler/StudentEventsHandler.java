@@ -9,18 +9,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StudentEventsHandler {
-    private final ciamb.demo.springaxondemo.core.api.repository.StudentRepository StudentRepository;
+    private final StudentRepository studentRepository;
 
-
-    public StudentEventsHandler(StudentRepository StudentRepository) {
-        this.StudentRepository = StudentRepository;
+    public StudentEventsHandler(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
     @EventHandler
     public void handle(StudentCreatedEvent studentCreatedEvent) {
-    Student student =
-            new Student();
-    BeanUtils.copyProperties(studentCreatedEvent, student);
-    StudentRepository.save(student);
+        Student student =
+                new Student();
+        BeanUtils.copyProperties(studentCreatedEvent, student);
+        studentRepository.save(student);
     }
 }
