@@ -1,5 +1,6 @@
 package ciamb.demo.springaxondemo.command.api.BLL.handler;
 
+import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentDeletedEvent;
 import ciamb.demo.springaxondemo.core.api.entity.Student;
 import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentCreatedEvent;
 import ciamb.demo.springaxondemo.core.api.repository.StudentRepository;
@@ -27,4 +28,14 @@ public class StudentEventsHandler {
         BeanUtils.copyProperties(studentCreatedEvent, student);
         studentRepository.save(student);
     }
+
+    @EventHandler
+    public void handle(StudentDeletedEvent studentDeletedEvent) {
+
+        Student student =
+                new Student();
+        BeanUtils.copyProperties(studentDeletedEvent, student);
+        studentRepository.deleteById(student.getId());
+    }
+
 }
