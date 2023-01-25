@@ -1,12 +1,11 @@
 package ciamb.demo.springaxondemo.command.api.PL.controller;
 
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.CreateStudentCommand;
+import ciamb.demo.springaxondemo.command.api.BLL.commands.student.DeleteStudentByIdCommand;
+import ciamb.demo.springaxondemo.core.api.entity.Student;
 import ciamb.demo.springaxondemo.core.api.rest.StudentRest;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -30,6 +29,17 @@ public class StudentCommandController {
                         .lastName(studentRest.getLastName())
                         .birthDate(studentRest.getBirthDate())
                         .build();
-    return commandGateway.sendAndWait(createStudentCommand);
+        return commandGateway.sendAndWait(createStudentCommand);
     }
+
+    @DeleteMapping
+    public String deleteStudentById(@RequestBody Integer id) {
+        DeleteStudentByIdCommand deleteStudentByIdCommand =
+                DeleteStudentByIdCommand.builder()
+                        .studentId(UUID.randomUUID().toString())
+                        .id(id)
+                        .build();
+        return commandGateway.sendAndWait(deleteStudentByIdCommand);
+    }
+
 }

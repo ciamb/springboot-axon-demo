@@ -1,7 +1,9 @@
 package ciamb.demo.springaxondemo.command.api.BLL.aggregate;
 
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.CreateStudentCommand;
+import ciamb.demo.springaxondemo.command.api.BLL.commands.student.DeleteStudentByIdCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentCreatedEvent;
+import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentDeletedEvent;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -20,6 +22,7 @@ public class StudentAggregate {
     @AggregateIdentifier
     private String studentId;
 
+    private Integer id;
     private String name;
     private String lastName;
     private LocalDate birthDate;
@@ -42,6 +45,16 @@ public class StudentAggregate {
         // componenti del sistema delle modifiche apportate allo stato dell'Aggregate.
     }
 
+    @CommandHandler
+    public StudentAggregate(DeleteStudentByIdCommand deleteStudentByIdCommand) {
+
+        StudentDeletedEvent studentDeletedEvent =
+                new StudentDeletedEvent();
+        BeanUtils.copyProperties(deleteStudentByIdCommand, studentDeletedEvent);
+        AggregateLifecycle.apply(studentDeletedEvent);
+
+    }
+
     // Quando un evento viene pubblicato nel sistema di messaggistica, Axon cerca tra tutti
     // i metodi annotati con @EventSourcingHandler per trovare quello che è in grado
     // di gestire l'evento pubblicato. Una volta individuato il metodo corretto, Axon
@@ -53,4 +66,11 @@ public class StudentAggregate {
         this.lastName = studentCreatedEvent.getLastName();
         this.birthDate = studentCreatedEvent.getBirthDate();
     }
+
+    @EventSourcingHandler
+    public void on(StudentDeletedEvent studentDeletedEvent) {
+        this.studentId = studentDeletedEvent.getStudentId();
+        this.id = studentDeletedEvent.getId();
+    }
+
 }
