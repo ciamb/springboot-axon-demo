@@ -13,6 +13,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/student")
 public class StudentCommandController {
+    // Mi inietto il CommandGateway che fa da cancello per le chiamate verso i vari servizi
+    // (in un ambiente a microservizi) ma nel nostro caso fa solo da dispatcher.
     private final CommandGateway commandGateway;
 
     public StudentCommandController(CommandGateway commandGateway){

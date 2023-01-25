@@ -15,8 +15,13 @@ public class StudentEventsHandler {
         this.studentRepository = studentRepository;
     }
 
+    // Il metodo etichettato con @EventHandler deve avere un parametro che rappresenta l'evento che deve essere gestito.
+    // Quando l'evento viene generato, il metodo etichettato con @EventHandler viene chiamato automaticamente per gestirlo.
+    // @EventHandler è generico rispetto a quello che troviamo all'interno dell' aggregate.
     @EventHandler
     public void handle(StudentCreatedEvent studentCreatedEvent) {
+
+        // All' attivazione dell'evento StudentCreatedEvent crea lo studente e lo salva all'interno del db!
         Student student =
                 new Student();
         BeanUtils.copyProperties(studentCreatedEvent, student);
