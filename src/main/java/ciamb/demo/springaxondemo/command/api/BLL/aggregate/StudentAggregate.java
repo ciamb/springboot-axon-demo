@@ -2,8 +2,10 @@ package ciamb.demo.springaxondemo.command.api.BLL.aggregate;
 
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.CreateStudentCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.DeleteStudentByIdCommand;
+import ciamb.demo.springaxondemo.command.api.BLL.commands.student.EditStudentCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentCreatedEvent;
 import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentDeletedEvent;
+import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentEditedEvent;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -48,10 +50,24 @@ public class StudentAggregate {
     @CommandHandler
     public StudentAggregate(DeleteStudentByIdCommand deleteStudentByIdCommand) {
 
+        // validazioni
+
         StudentDeletedEvent studentDeletedEvent =
                 new StudentDeletedEvent();
         BeanUtils.copyProperties(deleteStudentByIdCommand, studentDeletedEvent);
         AggregateLifecycle.apply(studentDeletedEvent);
+
+    }
+
+    @CommandHandler
+    public StudentAggregate(EditStudentCommand editStudentCommand) {
+
+        // validazioni
+
+        StudentEditedEvent studentEditEvent =
+                new StudentEditedEvent();
+        BeanUtils.copyProperties(editStudentCommand, studentEditEvent);
+        AggregateLifecycle.apply(studentEditEvent);
 
     }
 
@@ -71,6 +87,15 @@ public class StudentAggregate {
     public void on(StudentDeletedEvent studentDeletedEvent) {
         this.studentId = studentDeletedEvent.getStudentId();
         this.id = studentDeletedEvent.getId();
+    }
+
+    @EventSourcingHandler
+    public void on(StudentEditedEvent studentEditedEvent) {
+        this.id = studentEditedEvent.getId();
+        this.studentId = studentEditedEvent.getStudentId();
+        this.name = studentEditedEvent.getName();
+        this.lastName = studentEditedEvent.getLastName();
+        this.birthDate = studentEditedEvent.getBirthDate();
     }
 
 }
