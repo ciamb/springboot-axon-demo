@@ -22,12 +22,12 @@ public class StudentEventsHandler {
         this.studentRepository = studentRepository;
     }
 
-    // Il metodo etichettato con @EventHandler deve avere un parametro che rappresenta l'evento che deve essere gestito.
-    // Quando l'evento viene generato, il metodo etichettato con @EventHandler viene chiamato automaticamente per gestirlo.
-    // @EventHandler è generico rispetto a quello che troviamo all'interno dell' aggregate.
+    /* Il metodo etichettato con @EventHandler deve avere un parametro che rappresenta l'evento che deve essere gestito.
+    * Quando l'evento viene generato, il metodo etichettato con @EventHandler viene chiamato automaticamente per gestirlo.
+    * @EventHandler è generico rispetto a quello che troviamo all'interno dell' aggregate. */
+
     @EventHandler
     public void on(StudentCreatedEvent studentCreatedEvent) {
-
         // All' attivazione dell'evento StudentCreatedEvent crea lo studente e lo salva all'interno del db!
         Student student =
                 new Student();
@@ -35,29 +35,32 @@ public class StudentEventsHandler {
         studentRepository.save(student);
     }
 
+    // Queste exception è gestita dall'handler del processinggroup student
     @EventHandler
     public void on(StudentDeletedEvent studentDeletedEvent) {
-
-        Student student =
-                new Student();
-        BeanUtils.copyProperties(studentDeletedEvent, student);
-        studentRepository.deleteById(student.getId());
+            Student student =
+                    studentRepository.findById(studentDeletedEvent.getId()).orElseThrow(EntityNotFoundException::new);
+            BeanUtils.copyProperties(studentDeletedEvent, student);
+            studentRepository.deleteById(student.getId());
     }
 
     @EventHandler
     public void on(StudentEditedEvent studentEditedEvent) {
-
-        Student student =
-                studentRepository.findById(studentEditedEvent.getId()).orElseThrow(EntityNotFoundException::new);
-        if(studentEditedEvent.getName() != null) student.setName(studentEditedEvent.getName());
-        if(studentEditedEvent.getLastName() != null) student.setLastName(studentEditedEvent.getLastName());
-        if(studentEditedEvent.getBirthDate() != null) student.setBirthDate(studentEditedEvent.getBirthDate());
-        studentRepository.save(student);
+            Student student =
+                    studentRepository.findById(studentEditedEvent.getId()).orElseThrow(EntityNotFoundException::new);
+            if (studentEditedEvent.getName() != null) student.setName(studentEditedEvent.getName());
+            if (studentEditedEvent.getLastName() != null) student.setLastName(studentEditedEvent.getLastName());
+            if (studentEditedEvent.getBirthDate() != null) student.setBirthDate(studentEditedEvent.getBirthDate());
+            studentRepository.save(student);
     }
 
-    @ExceptionHandler
-    public void handle(Exception exception) throws Exception {
-        throw exception;
-    }
-
+//    @ExceptionHandler
+//    public void handle(Exception exception) {
+//        if(exception instanceof EntityNotFoundException) {
+//            // crea una risposta personalizzata per l'utente
+//            System.out.println("Errore durante la gestione dell'evento: " + exception.getMessage());
+//        } else {
+//            System.out.println("Qualcosa deve essere andato storto!");
+//        }
+//    }
 }

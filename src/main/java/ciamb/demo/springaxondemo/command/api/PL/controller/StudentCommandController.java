@@ -7,6 +7,8 @@ import ciamb.demo.springaxondemo.core.api.entity.Student;
 import ciamb.demo.springaxondemo.core.api.repository.StudentRepository;
 import ciamb.demo.springaxondemo.core.api.rest.StudentRest;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,47 +19,58 @@ public class StudentCommandController {
     // Mi inietto il CommandGateway che fa da cancello per le chiamate verso i vari servizi
     // (in un ambiente a microservizi) ma nel nostro caso fa solo da dispatcher.
     private final CommandGateway commandGateway;
-    private final StudentRepository studentRepository;
 
-    public StudentCommandController(CommandGateway commandGateway,
-                                    StudentRepository studentRepository){
+    public StudentCommandController(CommandGateway commandGateway){
         this.commandGateway = commandGateway;
-        this.studentRepository = studentRepository;
     }
 
     @PostMapping
-    public String addStudent(@RequestBody StudentRest studentRest) {
-        CreateStudentCommand createStudentCommand =
-                CreateStudentCommand.builder()
-                        .studentId(UUID.randomUUID().toString())
-                        .name(studentRest.getName())
-                        .lastName(studentRest.getLastName())
-                        .birthDate(studentRest.getBirthDate())
-                        .build();
-        return commandGateway.sendAndWait(createStudentCommand);
+    public ResponseEntity<String> addStudent(@RequestBody StudentRest studentRest) {
+        try {
+            CreateStudentCommand createStudentCommand =
+                    CreateStudentCommand.builder()
+                            .studentId(UUID.randomUUID().toString())
+                            .name(studentRest.getName())
+                            .lastName(studentRest.getLastName())
+                            .birthDate(studentRest.getBirthDate())
+                            .build();
+            commandGateway.sendAndWait(createStudentCommand);
+            return new ResponseEntity<>("Studente aggiunto correttamente!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Qualcosa è andato storto!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping
-    public String deleteStudentById(@RequestBody Integer id) {
-        DeleteStudentByIdCommand deleteStudentByIdCommand =
-                DeleteStudentByIdCommand.builder()
-                        .studentId(UUID.randomUUID().toString())
-                        .id(id)
-                        .build();
-        return commandGateway.sendAndWait(deleteStudentByIdCommand);
+    public ResponseEntity<String> deleteStudentById(@RequestBody Integer id) {
+        try {
+            DeleteStudentByIdCommand deleteStudentByIdCommand =
+                    DeleteStudentByIdCommand.builder()
+                            .studentId(UUID.randomUUID().toString())
+                            .id(id)
+                            .build();
+            commandGateway.sendAndWait(deleteStudentByIdCommand);
+            return new ResponseEntity<>("Eliminazione avvenuta con successo!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Id non trovato!", HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping(path = "/{id}")
-    public String editStudent(@PathVariable Integer id, @RequestBody StudentRest studentRest) {
-        EditStudentCommand editStudentCommand =
-                EditStudentCommand.builder()
-                        .id(id)
-                        .studentId(UUID.randomUUID().toString())
-                        .name(studentRest.getName())
-                        .lastName(studentRest.getLastName())
-                        .birthDate(studentRest.getBirthDate())
-                        .build();
-        return commandGateway.sendAndWait(editStudentCommand);
+    public ResponseEntity<String> editStudent(@PathVariable Integer id, @RequestBody StudentRest studentRest) {
+        try {
+            EditStudentCommand editStudentCommand =
+                    EditStudentCommand.builder()
+                            .id(id)
+                            .studentId(UUID.randomUUID().toString())
+                            .name(studentRest.getName())
+                            .lastName(studentRest.getLastName())
+                            .birthDate(studentRest.getBirthDate())
+                            .build();
+            commandGateway.sendAndWait(editStudentCommand);
+            return new ResponseEntity<>("Studente modificato con successo!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Id non trovato!", HttpStatus.NOT_FOUND);
+        }
     }
-
 }
