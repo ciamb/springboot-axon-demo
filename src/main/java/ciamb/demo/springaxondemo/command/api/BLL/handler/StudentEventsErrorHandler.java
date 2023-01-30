@@ -12,7 +12,7 @@ public class StudentEventsErrorHandler implements ListenerInvocationErrorHandler
     @Override
     public void onError(@Nonnull Exception exception, @Nonnull EventMessage<?> eventMessage, @Nonnull EventMessageHandler eventMessageHandler) {
         if(exception instanceof EntityNotFoundException) {
-            System.out.println("L'utente con id: " + eventMessage.getPayload() + " non è stato trovato nel db");
+            System.out.println("L'utente con id: " + eventMessage.getPayload() + " non è stato trovato nel db!");
         } else {
             System.out.println("Errore generico");
         }

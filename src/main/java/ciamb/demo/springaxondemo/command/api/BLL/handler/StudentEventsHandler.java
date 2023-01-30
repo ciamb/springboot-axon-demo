@@ -9,7 +9,6 @@ import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -35,7 +34,7 @@ public class StudentEventsHandler {
         studentRepository.save(student);
     }
 
-    // Queste exception è gestita dall'handler del processinggroup student
+    // Queste exception sono gestite dall'handler del processinggroup student
     @EventHandler
     public void on(StudentDeletedEvent studentDeletedEvent) {
             Student student =

@@ -3,8 +3,6 @@ package ciamb.demo.springaxondemo.command.api.PL.controller;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.CreateStudentCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.DeleteStudentByIdCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.EditStudentCommand;
-import ciamb.demo.springaxondemo.core.api.entity.Student;
-import ciamb.demo.springaxondemo.core.api.repository.StudentRepository;
 import ciamb.demo.springaxondemo.core.api.rest.StudentRest;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.http.HttpStatus;
@@ -35,9 +33,9 @@ public class StudentCommandController {
                             .birthDate(studentRest.getBirthDate())
                             .build();
             commandGateway.sendAndWait(createStudentCommand);
-            return new ResponseEntity<>("Studente aggiunto correttamente!", HttpStatus.OK);
+            return new ResponseEntity<>("Evento pubblicato con successo!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Qualcosa è andato storto!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Qualcosa è andato storto.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -50,9 +48,9 @@ public class StudentCommandController {
                             .id(id)
                             .build();
             commandGateway.sendAndWait(deleteStudentByIdCommand);
-            return new ResponseEntity<>("Eliminazione avvenuta con successo!", HttpStatus.OK);
+            return new ResponseEntity<>("Evento pubblicato con successo!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Id non trovato!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Qualcosa è andato storto.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -68,9 +66,9 @@ public class StudentCommandController {
                             .birthDate(studentRest.getBirthDate())
                             .build();
             commandGateway.sendAndWait(editStudentCommand);
-            return new ResponseEntity<>("Studente modificato con successo!", HttpStatus.OK);
+            return new ResponseEntity<>("Evento pubblicato con successo!", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Id non trovato!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Qualcosa è andato storto.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -13,10 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EventProcessingConfiguration {
 
-    // Autowired è commentato perché blocca l'applicativo se viene generato un errore che dovrebbe gestire
-    // mentre al momento senza autowired lancia l'eccezione e poi passa al listener successivo
-
-    // DA CAPIRE SE FUNZIONA/SERVE
     @Autowired
     public void configure(final EventProcessingConfigurer eventProcessingConfigurer) {
         eventProcessingConfigurer.registerListenerInvocationErrorHandler(
