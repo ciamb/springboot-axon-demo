@@ -4,6 +4,7 @@ import ciamb.demo.springaxondemo.command.api.BLL.commands.student.CreateStudentC
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.DeleteStudentByIdCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.EditStudentCommand;
 import ciamb.demo.springaxondemo.core.api.rest.StudentRest;
+import lombok.extern.log4j.Log4j2;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/student")
+@Log4j2
 public class StudentCommandController {
     // Mi inietto il CommandGateway che fa da cancello per le chiamate verso i vari servizi
     // (in un ambiente a microservizi) ma nel nostro caso fa solo da dispatcher.
@@ -33,6 +35,7 @@ public class StudentCommandController {
                             .birthDate(studentRest.getBirthDate())
                             .build();
             commandGateway.sendAndWait(createStudentCommand);
+            log.info("Comando inviato! {}", createStudentCommand.getStudentId());
             return new ResponseEntity<>("Evento pubblicato con successo!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Qualcosa è andato storto.", HttpStatus.INTERNAL_SERVER_ERROR);
