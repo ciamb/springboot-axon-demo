@@ -34,8 +34,9 @@ public class StudentCommandController {
                             .lastName(studentRest.getLastName())
                             .birthDate(studentRest.getBirthDate())
                             .build();
+            log.info("Comando inviato al commandGateway!");
             commandGateway.sendAndWait(createStudentCommand);
-            log.info("Comando inviato! {}", createStudentCommand.getStudentId());
+            log.info("Pubblicazione avvenuta!");
             return new ResponseEntity<>("Evento pubblicato con successo!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Qualcosa è andato storto.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,7 +51,9 @@ public class StudentCommandController {
                             .studentId(UUID.randomUUID().toString())
                             .id(id)
                             .build();
+            log.info("Comando inviato al commandGateway!");
             commandGateway.sendAndWait(deleteStudentByIdCommand);
+            log.info("Pubblicazione avvenuta!");
             return new ResponseEntity<>("Evento pubblicato con successo!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Qualcosa è andato storto.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -68,7 +71,9 @@ public class StudentCommandController {
                             .lastName(studentRest.getLastName())
                             .birthDate(studentRest.getBirthDate())
                             .build();
+            log.info("Comando inviato al commandGateway!");
             commandGateway.sendAndWait(editStudentCommand);
+            log.info("Pubblicazione avvenuta!");
             return new ResponseEntity<>("Evento pubblicato con successo!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Qualcosa è andato storto.", HttpStatus.INTERNAL_SERVER_ERROR);
