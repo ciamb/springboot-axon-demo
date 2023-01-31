@@ -1,0 +1,51 @@
+{
+  "Configuration": {
+    "Appenders": {
+      "Console": {
+        "name": "Console",
+        "target": "SYSTEM_OUT",
+        "PatternLayout": {
+          "disableAnsi": false,
+          "pattern": "%style{%d{ISO8601}}{bright,magenta} %highlight{%-5level }[%style{%t}{bright,cyan}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"
+        }
+      },
+      "RollingFile": {
+        "name": "RollingFile",
+        "fileName": "./logs/log4j2.log",
+        "filePattern": "./logs/$${date:yyyy-MM}/log4j2-%d{-dd-MMMM-yyyy}-%i.log.gz",
+        "PatternLayout": {
+          "pattern": "%d %p %C{1.} [%t] %m%n"
+        },
+        "Policies": {
+          "OnStartupTriggeringPolicy": {},
+          "SizeBasedTriggeringPolicy": {
+            "size": "10 MB"
+          },
+          "TimeBasedTriggeringPolicy": {}
+        }
+      }
+    },
+    "Loggers": {
+      "Root": {
+        "level": "info",
+        "AppenderRef": [
+          {
+            "ref": "Console"
+          },
+          {
+            "ref": "RollingFile"
+          }
+        ]
+      },
+      "Logger": [
+        {
+          "name": "ciamb.demo",
+          "level": "trace",
+          "AppenderRef": [
+            { }
+          ]
+        }
+      ]
+    }
+  }
+}

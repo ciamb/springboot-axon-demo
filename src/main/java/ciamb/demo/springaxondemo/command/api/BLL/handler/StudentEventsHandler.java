@@ -5,6 +5,7 @@ import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentEdit
 import ciamb.demo.springaxondemo.core.api.entity.Student;
 import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentCreatedEvent;
 import ciamb.demo.springaxondemo.core.api.repository.StudentRepository;
+import lombok.extern.log4j.Log4j2;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityNotFoundException;
 
 @Component
+@Log4j2
 @ProcessingGroup("student")
 public class StudentEventsHandler {
     private final StudentRepository studentRepository;
@@ -32,6 +34,7 @@ public class StudentEventsHandler {
                 new Student();
         BeanUtils.copyProperties(studentCreatedEvent, student);
         studentRepository.save(student);
+        log.info("Studente aggiunto correttamente nel db! id: {}", student.getId());
     }
 
     // Queste exception sono gestite dall'handler del processinggroup student
@@ -53,13 +56,4 @@ public class StudentEventsHandler {
             studentRepository.save(student);
     }
 
-//    @ExceptionHandler
-//    public void handle(Exception exception) {
-//        if(exception instanceof EntityNotFoundException) {
-//            // crea una risposta personalizzata per l'utente
-//            System.out.println("Errore durante la gestione dell'evento: " + exception.getMessage());
-//        } else {
-//            System.out.println("Qualcosa deve essere andato storto!");
-//        }
-//    }
 }

@@ -7,6 +7,7 @@ import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentCrea
 import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentDeletedEvent;
 import ciamb.demo.springaxondemo.command.api.BLL.events.studentevent.StudentEditedEvent;
 import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 // che si aspetta in arrivo e che corrisponda al @TargetAggregateIdentifier
 @Aggregate
 @NoArgsConstructor
+@Log4j2
 public class StudentAggregate {
     @AggregateIdentifier
     private String studentId;
@@ -45,6 +47,8 @@ public class StudentAggregate {
         // Serve per registrare eventi all'interno di un Aggregate e per pubblicare
         // gli eventi registrati nel sistema di messaggistica, in modo da informare altri
         // componenti del sistema delle modifiche apportate allo stato dell'Aggregate.
+        log.info("Evento pubblicato! aggregateIdentifier = \"{}\"", studentCreatedEvent.getStudentId());
+
     }
 
     @CommandHandler
@@ -56,6 +60,7 @@ public class StudentAggregate {
                 new StudentDeletedEvent();
         BeanUtils.copyProperties(deleteStudentByIdCommand, studentDeletedEvent);
         AggregateLifecycle.apply(studentDeletedEvent);
+        log.info("Evento pubblicato! aggregateIdentifier = \"{}\"", studentDeletedEvent.getStudentId());
 
     }
 
@@ -68,6 +73,7 @@ public class StudentAggregate {
                 new StudentEditedEvent();
         BeanUtils.copyProperties(editStudentCommand, studentEditEvent);
         AggregateLifecycle.apply(studentEditEvent);
+        log.info("Evento pubblicato! aggregateIdentifier = \"{}\"", studentEditEvent.getStudentId());
 
     }
 
@@ -85,8 +91,8 @@ public class StudentAggregate {
 
     @EventSourcingHandler
     public void on(StudentDeletedEvent studentDeletedEvent) {
-        this.studentId = studentDeletedEvent.getStudentId();
         this.id = studentDeletedEvent.getId();
+        this.studentId = studentDeletedEvent.getStudentId();
     }
 
     @EventSourcingHandler
