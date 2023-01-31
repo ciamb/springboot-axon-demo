@@ -3,6 +3,7 @@ package ciamb.demo.springaxondemo.command.api.PL.controller;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.CreateStudentCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.DeleteStudentByIdCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.student.EditStudentCommand;
+import ciamb.demo.springaxondemo.core.api.exception.EmptyNameExcpetion;
 import ciamb.demo.springaxondemo.core.api.rest.StudentRest;
 import lombok.extern.log4j.Log4j2;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -25,8 +26,10 @@ public class StudentCommandController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addStudent(@RequestBody StudentRest studentRest) {
-        try {
+    public ResponseEntity<String> addStudent(@RequestBody StudentRest studentRest) throws Exception {
+        if(studentRest.getName().isEmpty() || studentRest.getName().length() == 0) {
+            throw new EmptyNameExcpetion("Il campo name è vuoto!");
+        } else {
             CreateStudentCommand createStudentCommand =
                     CreateStudentCommand.builder()
                             .studentId(UUID.randomUUID().toString())
@@ -38,8 +41,6 @@ public class StudentCommandController {
             commandGateway.sendAndWait(createStudentCommand);
             log.info("Pubblicazione avvenuta!");
             return new ResponseEntity<>("Evento pubblicato con successo!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Qualcosa è andato storto.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
