@@ -1,9 +1,6 @@
 package ciamb.demo.springaxondemo.core.api.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +9,8 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,5 +20,4 @@ public class Teacher {
     private Integer teacherId;
     private String name;
     private String lastName;
-    private LocalDate birthDate;
 }

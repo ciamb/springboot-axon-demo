@@ -27,7 +27,6 @@ public class TeacherProjection {
                         .builder()
                         .name(teacher.getName())
                         .lastName(teacher.getLastName())
-                        .birthDate(teacher.getBirthDate())
                         .build())
                 .collect(Collectors.toList());
     }

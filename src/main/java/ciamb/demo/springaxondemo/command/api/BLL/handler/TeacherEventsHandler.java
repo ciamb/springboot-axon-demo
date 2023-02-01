@@ -1,11 +1,14 @@
 package ciamb.demo.springaxondemo.command.api.BLL.handler;
 
 import ciamb.demo.springaxondemo.command.api.BLL.events.teacherevent.TeacherCreatedEvent;
+import ciamb.demo.springaxondemo.command.api.BLL.events.teacherevent.TeacherDeletedByIdEvent;
 import ciamb.demo.springaxondemo.core.api.entity.Teacher;
 import ciamb.demo.springaxondemo.core.api.repository.TeacherRepository;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.EntityNotFoundException;
 
 @Component
 public class TeacherEventsHandler {
@@ -16,10 +19,19 @@ public class TeacherEventsHandler {
     }
 
     @EventHandler
-    public void handle(TeacherCreatedEvent teacherCreatedEvent) {
+    public void on(TeacherCreatedEvent teacherCreatedEvent) {
         Teacher teacher =
                 new Teacher();
         BeanUtils.copyProperties(teacherCreatedEvent, teacher);
         teacherRepository.save(teacher);
+    }
+
+    @EventHandler
+    public void on(TeacherDeletedByIdEvent teacherDeletedByIdEvent) {
+        if(teacherRepository.existsById(teacherDeletedByIdEvent.getTeacherId())) {
+            teacherRepository.deleteById(teacherDeletedByIdEvent.getTeacherId());
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 }

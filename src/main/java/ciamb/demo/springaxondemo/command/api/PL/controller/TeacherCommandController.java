@@ -1,33 +1,35 @@
 package ciamb.demo.springaxondemo.command.api.PL.controller;
 
-import ciamb.demo.springaxondemo.command.api.BLL.commands.teacher.CreateTeacherCommand;
-import ciamb.demo.springaxondemo.core.api.rest.TeacherRest;
-import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import ciamb.demo.springaxondemo.command.api.BLL.dto.teacher.CreateTeacherRequestDto;
+import ciamb.demo.springaxondemo.command.api.BLL.dto.teacher.DeleteTeacherByIdRequestDto;
+import ciamb.demo.springaxondemo.command.api.BLL.service.TeacherCommandService;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/teacher")
+@Log4j2
 public class TeacherCommandController {
-    private final CommandGateway commandGateway;
-
-    public TeacherCommandController(CommandGateway commandGateway) {
-        this.commandGateway = commandGateway;
+    private final TeacherCommandService teacherCommandService;
+    public TeacherCommandController(TeacherCommandService teacherCommandService) {
+        this.teacherCommandService = teacherCommandService;
     }
 
     @PostMapping
-    public String addTeacher(@RequestBody TeacherRest teacherRest) {
-        CreateTeacherCommand createTeacherCommand =
-                CreateTeacherCommand.builder()
-                        .teacherId(UUID.randomUUID().toString())
-                        .name(teacherRest.getName())
-                        .lastName(teacherRest.getLastName())
-                        .birthDate(teacherRest.getBirthDate())
-                        .build();
-    return commandGateway.sendAndWait(createTeacherCommand);
+    public ResponseEntity<String> createTeacher(@RequestBody CreateTeacherRequestDto createTeacherRequestDto) throws ExecutionException, InterruptedException {
+        log.info("Siamo entrati nel metodo createTeacher del controller");
+        CompletableFuture<String> response = teacherCommandService.createTeacher(createTeacherRequestDto);
+        return new ResponseEntity<>(response.get(), HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteTeacherById(@RequestBody DeleteTeacherByIdRequestDto deleteTeacherByIdRequestDto) throws ExecutionException, InterruptedException {
+        CompletableFuture<String> response = teacherCommandService.deleteTeacherById(deleteTeacherByIdRequestDto);
+        return new ResponseEntity<>(response.get(), HttpStatus.OK);
     }
 }

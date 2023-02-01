@@ -1,19 +1,19 @@
 package ciamb.demo.springaxondemo.command.api.BLL.events.teacherevent;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import ciamb.demo.springaxondemo.command.api.BLL.events.BaseEvent;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class TeacherCreatedEvent {
-    private String teacherId;
-    private String name;
-    private String lastName;
-    private LocalDate birthDate;
+@Getter
+public class TeacherCreatedEvent extends BaseEvent<String> {
+
+    public TeacherCreatedEvent(String eventId, String name, String lastName) {
+        super(eventId);
+        this.name = name;
+        this.lastName = lastName;
+    }
+    private final String name;
+    private final String lastName;
+
 }

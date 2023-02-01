@@ -41,9 +41,7 @@
         {
           "name": "ciamb.demo",
           "level": "trace",
-          "AppenderRef": [
-            { }
-          ]
+          "AppenderRef": [ ]
         }
       ]
     }
