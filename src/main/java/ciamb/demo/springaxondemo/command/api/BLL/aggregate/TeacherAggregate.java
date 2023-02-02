@@ -52,7 +52,7 @@ public class TeacherAggregate {
     * DELETE
     */
     @CommandHandler
-    public TeacherAggregate(DeleteTeacherByIdCommand deleteTeacherByIdCommand) {
+    public void on(DeleteTeacherByIdCommand deleteTeacherByIdCommand) {
         AggregateLifecycle.apply(new TeacherDeletedByIdEvent(
                 deleteTeacherByIdCommand.getId(),
                 deleteTeacherByIdCommand.getTeacherId()
@@ -61,8 +61,8 @@ public class TeacherAggregate {
 
     @EventSourcingHandler
     public void on(TeacherDeletedByIdEvent teacherDeletedByIdEvent) {
-        this.id = teacherDeletedByIdEvent.getEventId();
         this.teacherId = teacherDeletedByIdEvent.getTeacherId();
+        this.id = teacherDeletedByIdEvent.getEventId();
     }
 
 }

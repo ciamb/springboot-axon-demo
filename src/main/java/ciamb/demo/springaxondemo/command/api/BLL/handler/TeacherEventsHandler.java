@@ -21,8 +21,12 @@ public class TeacherEventsHandler {
     @EventHandler
     public void on(TeacherCreatedEvent teacherCreatedEvent) {
         Teacher teacher =
-                new Teacher();
-        BeanUtils.copyProperties(teacherCreatedEvent, teacher);
+                Teacher.builder()
+                        .aggregateIdentifier(teacherCreatedEvent.getEventId())
+                        .name(teacherCreatedEvent.getName())
+                        .lastName(teacherCreatedEvent.getLastName())
+                        .build();
+
         teacherRepository.save(teacher);
     }
 

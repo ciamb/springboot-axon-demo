@@ -37,9 +37,11 @@ public class TeacherCommandService {
     }
 
     public CompletableFuture<String> deleteTeacherById(DeleteTeacherByIdRequestDto deleteTeacherByIdRequestDto) {
+        Teacher teacher = teacherRepository.findById(deleteTeacherByIdRequestDto.getTeacherId()).orElseThrow(EntityNotFoundException::new);
+        log.info(teacher);
         return commandGateway.send(new DeleteTeacherByIdCommand(
-                UUID.randomUUID().toString(),
-                deleteTeacherByIdRequestDto.getTeacherId()
+                teacher.getAggregateIdentifier(),
+                teacher.getTeacherId()
         ));
 
     }
