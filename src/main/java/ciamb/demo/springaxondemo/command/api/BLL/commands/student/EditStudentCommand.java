@@ -9,12 +9,8 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class EditStudentCommand {
-
-    private Integer id;
-
-    @TargetAggregateIdentifier
-    private String studentId;
-
+    private Integer studentId;
+    @TargetAggregateIdentifier private String id;
     private String name;
     private String lastName;
     private LocalDate birthDate;

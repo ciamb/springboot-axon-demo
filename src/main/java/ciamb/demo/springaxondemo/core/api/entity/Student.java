@@ -17,7 +17,8 @@ import java.time.LocalDate;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer studentId;
+    private String aggregateIdentifier;
     private String name;
     private String lastName;
     private LocalDate birthDate;

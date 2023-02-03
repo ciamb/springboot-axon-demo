@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentCreatedEvent {
-    private String studentId;
+    private String id; // -> aggregateIdentifier
     private String name;
     private String lastName;
     private LocalDate birthDate;

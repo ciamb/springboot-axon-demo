@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentEditedEvent {
-    private Integer id;
-    private String studentId;
+    private Integer studentId;
+    private String id; // -> aggregateIdentifier
     private String name;
     private String lastName;
     private LocalDate birthDate;

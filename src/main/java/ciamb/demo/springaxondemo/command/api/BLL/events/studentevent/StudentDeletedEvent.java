@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDeletedEvent {
-    private String studentId;
-    private Integer id;
-
+    private Integer studentId;
+    private String id; // -> aggregateIdentifier
 }

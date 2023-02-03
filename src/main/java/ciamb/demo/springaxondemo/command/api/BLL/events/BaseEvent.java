@@ -6,7 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class BaseEvent<T> {
-
-    private final T eventId;
-
+    private final T id;
 }

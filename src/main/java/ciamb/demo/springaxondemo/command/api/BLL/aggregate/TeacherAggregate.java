@@ -17,9 +17,8 @@ import org.axonframework.spring.stereotype.Aggregate;
 @Log4j2
 public class TeacherAggregate {
 
-    @AggregateIdentifier
-    private String id;
     private Integer teacherId;
+    @AggregateIdentifier private String id;
     private String name;
     private String lastName;
 
@@ -43,7 +42,7 @@ public class TeacherAggregate {
     @EventSourcingHandler
     public void on(TeacherCreatedEvent teacherCreatedEvent) {
         log.info("Creato evento teacherCreatedEvent nel metodo on dell'aggregate.");
-        this.id = teacherCreatedEvent.getEventId();
+        this.id = teacherCreatedEvent.getId();
         this.name = teacherCreatedEvent.getName();
         this.lastName = teacherCreatedEvent.getLastName();
     }
@@ -62,7 +61,5 @@ public class TeacherAggregate {
     @EventSourcingHandler
     public void on(TeacherDeletedByIdEvent teacherDeletedByIdEvent) {
         this.teacherId = teacherDeletedByIdEvent.getTeacherId();
-        this.id = teacherDeletedByIdEvent.getEventId();
     }
-
 }

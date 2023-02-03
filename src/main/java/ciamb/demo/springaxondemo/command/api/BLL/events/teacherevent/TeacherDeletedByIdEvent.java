@@ -5,9 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class TeacherDeletedByIdEvent extends BaseEvent<String> {
-
     private final Integer teacherId;
-
     public TeacherDeletedByIdEvent(String eventId, Integer teacherId) {
         super(eventId);
         this.teacherId = teacherId;

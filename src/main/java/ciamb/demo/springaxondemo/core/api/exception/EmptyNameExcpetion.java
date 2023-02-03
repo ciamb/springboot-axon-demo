@@ -8,13 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 @Setter
-@NoArgsConstructor
 public class EmptyNameExcpetion extends Exception{
-
     private String errorMessage;
-
-    public EmptyNameExcpetion(String errorMessage) {
+    public EmptyNameExcpetion() {
         super();
-        this.errorMessage = errorMessage;
+        this.errorMessage = "Il campo nome deve essere vuoto!";
     }
 }
