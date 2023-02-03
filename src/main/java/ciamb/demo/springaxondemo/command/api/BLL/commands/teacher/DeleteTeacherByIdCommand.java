@@ -5,11 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class DeleteTeacherByIdCommand extends BaseCommand<String> {
-
+    private final Integer teacherId;
     public DeleteTeacherByIdCommand(String id, Integer teacherId) {
         super(id);
         this.teacherId = teacherId;
     }
-
-    private final Integer teacherId;
 }

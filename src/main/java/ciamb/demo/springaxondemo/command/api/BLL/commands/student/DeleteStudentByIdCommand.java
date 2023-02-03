@@ -7,10 +7,6 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 @Data
 @Builder
 public class DeleteStudentByIdCommand {
-
-    @TargetAggregateIdentifier
-    private String studentId;
-
-    private Integer id;
-
+    private Integer studentId;
+    @TargetAggregateIdentifier private String id;
 }

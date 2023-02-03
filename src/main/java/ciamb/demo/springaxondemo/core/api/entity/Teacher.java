@@ -21,5 +21,4 @@ public class Teacher {
     private String aggregateIdentifier;
     private String name;
     private String lastName;
-
 }

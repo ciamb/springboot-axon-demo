@@ -22,20 +22,15 @@ public class TeacherEventsHandler {
     public void on(TeacherCreatedEvent teacherCreatedEvent) {
         Teacher teacher =
                 Teacher.builder()
-                        .aggregateIdentifier(teacherCreatedEvent.getEventId())
+                        .aggregateIdentifier(teacherCreatedEvent.getId())
                         .name(teacherCreatedEvent.getName())
                         .lastName(teacherCreatedEvent.getLastName())
                         .build();
-
         teacherRepository.save(teacher);
     }
 
     @EventHandler
     public void on(TeacherDeletedByIdEvent teacherDeletedByIdEvent) {
-        if(teacherRepository.existsById(teacherDeletedByIdEvent.getTeacherId())) {
-            teacherRepository.deleteById(teacherDeletedByIdEvent.getTeacherId());
-        } else {
-            throw new EntityNotFoundException();
-        }
+        teacherRepository.deleteById(teacherDeletedByIdEvent.getTeacherId());
     }
 }

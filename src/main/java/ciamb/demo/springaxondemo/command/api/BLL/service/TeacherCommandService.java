@@ -3,7 +3,6 @@ package ciamb.demo.springaxondemo.command.api.BLL.service;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.teacher.CreateTeacherCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.commands.teacher.DeleteTeacherByIdCommand;
 import ciamb.demo.springaxondemo.command.api.BLL.dto.teacher.CreateTeacherRequestDto;
-import ciamb.demo.springaxondemo.command.api.BLL.dto.teacher.DeleteTeacherByIdRequestDto;
 import ciamb.demo.springaxondemo.core.api.entity.Teacher;
 import ciamb.demo.springaxondemo.core.api.repository.TeacherRepository;
 import lombok.extern.log4j.Log4j2;
@@ -36,13 +35,11 @@ public class TeacherCommandService {
         ));
     }
 
-    public CompletableFuture<String> deleteTeacherById(DeleteTeacherByIdRequestDto deleteTeacherByIdRequestDto) {
-        Teacher teacher = teacherRepository.findById(deleteTeacherByIdRequestDto.getTeacherId()).orElseThrow(EntityNotFoundException::new);
-        log.info(teacher);
+    public CompletableFuture<String> deleteTeacherById(Integer id) {
+        Teacher teacher = teacherRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         return commandGateway.send(new DeleteTeacherByIdCommand(
                 teacher.getAggregateIdentifier(),
-                teacher.getTeacherId()
+                id
         ));
-
     }
 }
