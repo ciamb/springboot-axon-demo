@@ -6,7 +6,7 @@
         "target": "SYSTEM_OUT",
         "PatternLayout": {
           "disableAnsi": false,
-          "pattern": "%style{%d{ISO8601}}{bright,magenta} %highlight{%-5level }[%style{%t}{bright,cyan}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"
+          "pattern": "%style{%d{ISO8601}}{blue} %highlight{%-5level }[%style{%t}{bright,green}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"
         }
       },
       "RollingFile": {
