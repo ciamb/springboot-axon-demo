@@ -1,13 +1,8 @@
 package ciamb.demo.springaxondemo.configuration;
 
-import ciamb.demo.springaxondemo.command.api.BLL.handler.StudentEventsErrorHandler;
+import ciamb.demo.springaxondemo.command.api.handler.StudentEventsErrorHandler;
 import org.axonframework.config.EventProcessingConfigurer;
-import org.axonframework.eventhandling.ErrorHandler;
-import org.axonframework.eventhandling.TrackingEventProcessor;
-import org.axonframework.eventhandling.tokenstore.TokenStore;
-import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
